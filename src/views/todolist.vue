@@ -21,7 +21,7 @@
                     :options="options">
                     </mt-checklist>
                 </div> -->
-                <p style="margin-left: 10px;font-size: 12px;color: #999;">{{this.options.length === 0?'添加今日任务':'just do it'}}</p>
+                <p style="margin-left: 10px;font-size: 12px;color: #999; margin-top:10px;">{{this.options.length === 0?'添加今日任务':'just do it'}}</p>
                 <ul>
                     <li v-for="(item, index) in options" :key="index" class="todolist-item">
                         <div class="todolist-label">
@@ -41,6 +41,7 @@
             </mt-field>
         </mt-tab-container-item>
         <mt-tab-container-item id="history">
+            <p style="font-size: 12px;color: #999; margin-top:20px; text-align: center;" v-if="historyList.length === 0">暂无记录</p>
             <ul
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="loading"
@@ -90,10 +91,19 @@ export default {
         this.getOptions();
     },
     methods: {
+        loadMore() {
+            this.loading = true;
+            setTimeout(() => {
+                this.loading = false;
+            }, 1500);
+        },
         changeUser() {
             let currentUser = window.localStorage.getItem('user');
             window.localStorage.setItem('user', currentUser === 'wh'?'xh':'wh');
             this.currentUser = this.getCurrentUser();
+            setTimeout(() => {
+                this.getOptions();
+            })
         },
         getCurrentUser() {
             return window.localStorage.getItem('user') === 'wh' ? '吴慧' :'谢浩';
@@ -120,7 +130,11 @@ export default {
             }
             this.$http.get(`${baseUrl}/todolist`, {params: params}).then((res) => {
                 if (this.selected === 'today') {
-                    this.options = res.body[0].content;
+                    if (res.body.length !== 0) {
+                        this.options = res.body[0].content;
+                    } else {
+                        this.options = []; 
+                    }
                 } else {
                     this.historyList = res.body;
                 }
