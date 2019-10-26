@@ -5,7 +5,10 @@ import store from './store'
 import 'mint-ui/lib/style.css'
 import Mint from 'mint-ui'
 import  VueResource  from 'vue-resource'
+import Share from 'vue-social-share'
+import 'vue-social-share/dist/client.css';
 
+Vue.use(Share)
 Vue.use(Mint);
 Vue.config.productionTip = false
 Vue.use(VueResource);

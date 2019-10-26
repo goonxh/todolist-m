@@ -2,7 +2,7 @@
 <div class="todo-page">
     <mt-header :title="headerTitle">
         <p slot="left" @click="changeUser">{{currentUser}}</p>
-        <mt-button icon="more" slot="right"></mt-button>
+        <!-- <mt-button icon="more" slot="right"></mt-button> -->
     </mt-header>
     <mt-navbar v-model="selected">
         <mt-tab-item id="today">Today's Todolist.</mt-tab-item>
@@ -37,7 +37,7 @@
                 </ul>
             </div>
             <mt-field placeholder="New Item" :disableClear="true" v-model="newTodoItem">
-                <mt-button @click="newItem">Do it</mt-button>
+                <mt-button @click="newItem">To do it</mt-button>
             </mt-field>
         </mt-tab-container-item>
         <mt-tab-container-item id="history">
@@ -61,6 +61,9 @@
             </ul>
         </mt-tab-container-item>
     </mt-tab-container>
+    <div class="share">
+        <share :config="config"></share>
+    </div>
 </div>
 
 </template>
@@ -78,6 +81,13 @@ export default {
             options: [],
             newTodoItem: '',
             historyList: [],
+            config: {
+                url                 : window.location.href, // 网址
+                sites               : ['wechat'], // 启用的站点
+                disabled            : [], // 禁用的站点
+                wechatQrcodeTitle   : '微信扫一扫：分享', // 微信二维码提示文字
+                wechatQrcodeHelper  : '<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>'
+            }
         }
     },
     watch: {
@@ -196,5 +206,11 @@ export default {
     }
     .btn-group {
         margin-right: 10px;
+    }
+    .share {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        margin-left: -21px;
     }
 </style>  
